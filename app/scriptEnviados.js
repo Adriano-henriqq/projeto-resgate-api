@@ -2,41 +2,54 @@ import {enviaDadosParaBackend} from "../controlers/enviaDadosBack.js"
 import {removeDadosSelecionados} from "../app/script.js"
 
 document.addEventListener("DOMContentLoaded", async () => {
-    alert("Aqui estão os emails enviados, ao enviar um email ele ira desaparecer apenas para o usuario nao se perder no envio, caso recarregue a pagina os dados voltarao a aparecer na tela")
+    mostrarAlerta();
     try {
-        const grupoDe400 = await fetch('/api/dados-enviados').then(resposta => resposta.json())
-        const tabela = document.getElementById('dados-tabela')
-        const linhasDados = tabela.querySelectorAll('tr:not(:first-child)');
-        const emailsEnviados = document.querySelector("[data-enviados]")
-        linhasDados.forEach(linha => linha.remove());
-        let contador = 0;
-        for (const grupo of grupoDe400) {
-            for (let dado in grupo) {
-                let numeroDeEmailsEnviados = parseInt((contador++) + 1)
-                emailsEnviados.innerHTML = `Emails enviados até o momento: ${numeroDeEmailsEnviados}`
-
-                let novaLinha = document.createElement('tr')
-                novaLinha.innerHTML = `
-                <td><input id = "dados__check" type="checkbox" name="dados__check" value="1" data-nome="${grupo[dado].nome}"
-                 data-email="${grupo[dado].email}" ></td>
-                <td>${grupo[dado].nome}</td>
-                <td>${grupo[dado].email}</td>
-                `
-                tabela.appendChild(novaLinha)
-
-
-            }
-        }
-
-        return recebeDadosDoInput()
-
-
-
+        const dadosEnviados = await obterDadosEnviados();
+        limparLinhasAntigas();
+        adicionarLinhasNovas(dadosEnviados);
+        recebeDadosDoInput();
     } catch (error) {
         console.log(error);
     }
-})
+});
 
+function mostrarAlerta() {
+    alert("Aqui estão os emails enviados, ao enviar um email ele irá desaparecer apenas para o usuário não se perder no envio, caso recarregue a página os dados voltarão a aparecer na tela");
+}
+
+async function obterDadosEnviados() {
+    const resposta = await fetch('/api/dados-enviados');
+    return resposta.json();
+}
+
+function limparLinhasAntigas() {
+    const tabela = document.getElementById('dados-tabela');
+    const linhasDados = tabela.querySelectorAll('tr:not(:first-child)');
+    linhasDados.forEach(linha => linha.remove());
+}
+
+function adicionarLinhasNovas(grupoDe400) {
+    const tabela = document.getElementById('dados-tabela');
+    const emailsEnviados = document.querySelector("[data-enviados]");
+    let contador = 0;
+
+    grupoDe400.forEach(grupo => {
+        for (const dado in grupo) {
+            let numeroDeEmailsEnviados = contador + 1;
+            emailsEnviados.innerHTML = `Emails enviados até o momento: ${numeroDeEmailsEnviados}`;
+
+            let novaLinha = document.createElement('tr');
+            novaLinha.innerHTML = `
+                <td><input id="dados__check" type="checkbox" name="dados__check" value="1" data-nome="${grupo[dado].nome}"
+                 data-email="${grupo[dado].email}" ></td>
+                <td>${grupo[dado].nome}</td>
+                <td>${grupo[dado].email}</td>
+            `;
+            tabela.appendChild(novaLinha);
+            contador++;
+        }
+    });
+}
 
 
 function recebeDadosDoInput() {
