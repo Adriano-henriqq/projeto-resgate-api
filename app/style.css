@@ -1,0 +1,25 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+body{
+    background-color: #fdfdfd;
+    font-family: 'Roboto', sans-serif;
+}
+.enviado {
+    background-color: #8bc34a; /* Ou qualquer outra cor de sua escolha */
+}
+
+.check__style{
+    padding: .5rem;
+}
+.lista_transition{
+    transition: 1s;
+}
+.botao {
+    position: fixed;
+    bottom: 50px; /* Distância do botão até o final da tela */
+    left: 120px; /* Distância do botão até a borda direita da tela */
+  }
+  
+  
