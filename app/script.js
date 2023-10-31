@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                  data-email="${grupo[dado].email}" ></td>
                 <td>${grupo[dado].nome}</td>
                 <td>${grupo[dado].email}</td>
+                <td>${grupo[dado].ra}</td>
                 `
                 tabela.appendChild(novaLinha)
 

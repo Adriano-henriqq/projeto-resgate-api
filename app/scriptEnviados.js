@@ -41,9 +41,10 @@ function adicionarLinhasNovas(grupoDe400) {
             let novaLinha = document.createElement('tr');
             novaLinha.innerHTML = `
                 <td><input id="dados__check" type="checkbox" name="dados__check" value="1" data-nome="${grupo[dado].nome}"
-                 data-email="${grupo[dado].email}" ></td>
+                 data-email="${grupo[dado].email}"></td>
                 <td>${grupo[dado].nome}</td>
                 <td>${grupo[dado].email}</td>
+                <td>${grupo[dado].ra}</td>
             `;
             tabela.appendChild(novaLinha);
             contador++;

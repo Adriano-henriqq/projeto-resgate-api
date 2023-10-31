@@ -9,7 +9,7 @@ const conexao = mysql.createConnection({
  function buscaDados(){
     return new Promise((resolve, reject) =>{
   
-      conexao.query('SELECT * FROM `banco-cs-10`', (err, resultado, campos) => {
+      conexao.query('SELECT * FROM `retapeemail`', (err, resultado, campos) => {
        if(err){
            console.log('erro ao executar consulta', err);
            reject(err)
@@ -26,7 +26,7 @@ const conexao = mysql.createConnection({
   function buscaDadosEnviados(){
     return new Promise((resolve, reject) =>{
   
-      conexao.query('SELECT * FROM `emails_enviados_cs`', (err, resultado, campos) => {
+      conexao.query('SELECT * FROM `retapeenviados`', (err, resultado, campos) => {
        if(err){
            console.log('erro ao executar consulta', err);
            reject(err)
@@ -41,7 +41,7 @@ const conexao = mysql.createConnection({
   }
 // envia os dados para a tabela de emails enviados
   function enviaDados(nome, email) {
-    const query = `INSERT INTO emails_enviados_cs (nome, email) VALUES ('${nome}', '${email}')`;
+    const query = `INSERT INTO retapeenviados (nome, email) VALUES ('${nome}', '${email}')`;
     
     conexao.query(query, (error, results, fields) => {
       if (error) throw error;
@@ -51,7 +51,7 @@ const conexao = mysql.createConnection({
   
   //exclui os dados da tabela de emails nao enviados
 function excluiDados(nome,email){
-  const query = "DELETE FROM `banco-cs-10` WHERE nome = ? AND email = ?";
+  const query = "DELETE FROM `retapeemail` WHERE nome = ? AND email = ?";
   const value = [nome,email];
   conexao.query(query, value, (err, results) => {
    if(err) throw err;
