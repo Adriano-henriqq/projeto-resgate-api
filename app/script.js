@@ -7,29 +7,32 @@ document.addEventListener('DOMContentLoaded', async () => {
             const tabela = document.getElementById('dados-tabela')
            for(const grupo of grupoDe400){ 
             for (let dado in grupo) {
-                let novaLinha = document.createElement('tr')
-                novaLinha.classList.add('lista_transition')
-                novaLinha.innerHTML = `
+                criaLinhas(grupo, dado, tabela)
+            }
+        }
+         return recebeDadosInput();
+
+        
+
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+
+
+function criaLinhas(grupo, dado, tabela) {
+    let novaLinha = document.createElement('tr')
+    novaLinha.classList.add('lista_transition')
+    novaLinha.innerHTML = `
                 <td><input id = "dados__check" type="checkbox" name="dados__check" value="${grupo[dado].id}" data-nome="${grupo[dado].nome}"
                  data-email="${grupo[dado].email}" ></td>
                 <td>${grupo[dado].nome}</td>
                 <td>${grupo[dado].email}</td>
                 <td>${grupo[dado].ra}</td>
                 `
-                tabela.appendChild(novaLinha)
-
-
-            }
-        }
-                    
-            return recebeDadosInput();
-
-        return grupoDe400
-
-    } catch (error) {
-        console.log(error);
-    }
-})
+    tabela.appendChild(novaLinha)
+}
 
 function recebeDadosInput() {
     const checkboxMestre = document.querySelector("#check-mestre")

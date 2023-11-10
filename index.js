@@ -64,8 +64,7 @@ app.post('/enviar-email', async (req, res) => {
         }
     })
     filaDeEmails.push(dadosRecebidos)
-    console.log(filaDeEmails)
-    res.json('email Adicionado a fila')
+    res.status(200).json('email Adicionado a fila')
     
     enviaEmailDelay(transporter,dadosRecebidos,res)
 })

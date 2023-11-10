@@ -3,9 +3,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
 body{
-    background-color: #fdfdfd;
+    background: #fdfdfd;
+    background-size: cover;
     font-family: 'Roboto', sans-serif;
 }
+
+.container__background{
+    background-color: rgb(233, 236, 234)
+}
+.img-size{
+    width: 200px;
+    border-radius: 100%;
+    animation: moveUpDown 5s infinite alternate;
+}
+@keyframes moveUpDown {
+    0% {
+      transform: translateY(0);
+    }
+    50%{
+        transform: translateY(-30px);
+    }
+    100% {
+      transform: translateY(0); /* Ajuste a quantidade de movimento conforme necessário */
+    }
+  }
 .enviado {
     background-color: #8bc34a; /* Ou qualquer outra cor de sua escolha */
 }
@@ -22,4 +43,6 @@ body{
     left: 120px; /* Distância do botão até a borda direita da tela */
   }
   
-  
+  .container__nav{
+    margin-left: 12rem;
+  }
