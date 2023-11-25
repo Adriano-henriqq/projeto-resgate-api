@@ -1,18 +1,16 @@
-const {
-    buscaDados, enviaDados, excluiDados
-} = require('./db/db.js');
-
 
 async function enviaEmail(transporter,dados, res) {
     try {
         const dadosConscritos = dados;
-
+        const promises = []
         for (let dado in dadosConscritos) {
 
             const nome = dadosConscritos[dado].nome
             const email = dadosConscritos[dado].email
             
-
+            if(!email) {
+                console.log(`Email vazio, para o nome ${nome} pulando para o proximo email`)
+            }
             let dadosEmail = {
                 from: 'Comissão de Seleção Permanente das Forças Armadas 10 <cspfa10faltosos@gmail.com>',
                 to: email,
@@ -23,40 +21,47 @@ async function enviaEmail(transporter,dados, res) {
                 situada na Rua Licínio Cardoso, 96 - São Francisco Xavier, Rio de Janeiro - RJ, CEP 20911-015, em frente a estação de Metrô de triagem. Caso já tenha comparecido, favor desconsiderar esta mensagem.</p>`,
                 
             }
-            try{
-               await transporter.sendMail(dadosEmail, (error, info) => {
-                    if (error) {
-                        return console.log('erro no envio ', error);
-                    }
-                    console.log('Email enviado: ' + info.response);
-                    
-                    res.json('Email enviado com sucesso!');
-    
-                })
             
-            }catch(error){
-                console.log(`erro no envio para ${email}` , error);
-            }
+               
+                const emailPromise = new Promise((resolve, reject) => {
+                    transporter.sendMail(dadosEmail, (error, info) => {
+                        if (error) {
+                            reject(`Erro no envio para ${email}: ${error}`);
+                        } else {
+                            console.log(`Email enviado para: ${email} - ${info.response}`);
+                            resolve(`Email enviado com sucesso para: ${nome} com o Email: ${email}`);
+                        }
+                    });
+                });
+
+                promises.push(emailPromise)
+            
             
         }
+        try{
+            const resultados = await Promise.all(promises);
+            return resultados;     
+          }catch(error){
+              console.log(`erro no envio para ${email}` , error);
+          }
     } catch (error) {
         console.error('erro no envio ', error);
     }
 }
-let filaDeEmails = []
- function enviaEmailDelay(transporter, res){
-    if(filaDeEmails.length > 0){
-        const proximoEmail = filaDeEmails.shift()
+// let filaDeEmails = []
+//  function enviaEmailDelay(transporter, res){
+//     if(filaDeEmails.length > 0){
+//         const proximoEmail = filaDeEmails.shift()
         
-        enviaEmail(transporter,proximoEmail,res).then(()=>{
-            setTimeout(enviaEmailDelay,1000)
-        })
-    }
+//         enviaEmail(transporter,proximoEmail,res).then(()=>{
+//             setTimeout(enviaEmailDelay,1000)
+//         })
+//     }
     
     
- }
+//  }
 module.exports = {
     enviaEmail,
-    enviaEmailDelay,
-    filaDeEmails
+    // enviaEmailDelay,
+    // filaDeEmails
 }

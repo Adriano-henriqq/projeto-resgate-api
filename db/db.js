@@ -9,7 +9,7 @@ const conexao = mysql.createConnection({
  function buscaDados(){
     return new Promise((resolve, reject) =>{
   
-      conexao.query('SELECT * FROM `faltososoutubro`', (err, resultado, campos) => {
+      conexao.query('SELECT * FROM `teste1`', (err, resultado, campos) => {
        if(err){
            console.log('erro ao executar consulta', err);
            reject(err)
@@ -26,7 +26,7 @@ const conexao = mysql.createConnection({
   function buscaDadosEnviados(){
     return new Promise((resolve, reject) =>{
   
-      conexao.query('SELECT * FROM `enviadosoutubro`', (err, resultado, campos) => {
+      conexao.query('SELECT * FROM `dados_cs_csv`', (err, resultado, campos) => {
        if(err){
            console.log('erro ao executar consulta', err);
            reject(err)
@@ -41,8 +41,7 @@ const conexao = mysql.createConnection({
   }
 // envia os dados para a tabela de emails enviados
   function enviaDados(nome, email) {
-    const query = `INSERT INTO enviadosoutubro (nome, email) VALUES ('${nome}', '${email}')`;
-    
+    const query = `INSERT INTO dados_cs_csv (nome, email) VALUES ('${nome}', '${email}')`;
     conexao.query(query, (error, results, fields) => {
       if (error) throw error;
       console.log(`Novo usuário inserido com ID: ${results.insertId}`);
@@ -50,14 +49,25 @@ const conexao = mysql.createConnection({
   }
   
   //exclui os dados da tabela de emails nao enviados
-function excluiDados(nome,email){
-  const query = "DELETE FROM `faltososoutubro` WHERE nome = ? AND email = ?";
-  const value = [nome,email];
-  conexao.query(query, value, (err, results) => {
-   if(err) throw err;
-   console.log(`foram excluidos os dados ${results.affectedRows}`, ) 
-  })
+  // function excluiDados(nome,email){
+  //   const query = "DELETE FROM `teste1` WHERE nome = ? AND email = ?";
+  //   const value = [nome,email];
+  //   conexao.query(query, value, (err, results) => {
+  //    if(err) throw err;
+  //    console.log(`foram excluidos os dados ${results.affectedRows} para ${nome} e ${email}`, ) 
+  //   })
+  // }
+
+  function excluiDados(id) {
+    const query = "DELETE FROM `teste1` WHERE id = ?";
+    const value = [id];
+    conexao.query(query, value, (err, results) => {
+        if (err) throw err;
+        console.log(`Foram excluídos os dados com ID ${id}. Linhas afetadas: ${results.affectedRows}`);
+    });
 }
+
+
 
 
 // function excluirDados(dadosExcluir) {

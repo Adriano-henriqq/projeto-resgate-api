@@ -1,41 +1,50 @@
+
+import { removeDadosSelecionados } from "../app/script.js";
 async function enviaDadosParaBackend(dados) {
     try {
-        const resposta = await fetch("/enviar-email", {
+         const response = await fetch("/enviar-email", {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+              
             },
             body: JSON.stringify({
                 dados
             })
         })
 
-        const data = await resposta.json();
-        console.log('resposta do back', data)
+        const responseData = await response.json();
+
+        if (response.ok) {
+            responseData.messages.forEach(data => alert(data));
+        } else {
+            console.error('Erro no envio de emails:', responseData.message);
+        }
     } catch (err) {
-        console.log('erro gerado', err)
+        console.log('Erro gerado:', err);
     }
 }
 
 //exclui da tabela os 
-async function excluirDadosEnviados(dadosExcluir) {
-    try {
-        const resposta = await fetch("/excluir-dados-enviados", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                dadosExcluir
-            })
+function excluirDadosEnviados(dadosEmailSelecionados) {
+    // A função fetch aqui não está visível no código fornecido, mas assumindo que está funcionando corretamente
+    fetch('/excluir-dados-enviados', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ dadosExcluir: dadosEmailSelecionados,}),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Dados excluídos com sucesso!', data);
+            // Após excluir os dados no servidor, você pode chamar a função para remover da tabela
+        })
+        .catch(error => {
+            console.error('Erro ao excluir dados:', error);
         });
-
-        const data = await resposta.json();
-        console.log('resposta do back', data);
-    } catch (err) {
-        console.log('erro gerado', err);
-    }
 }
+
 
 async function salvaDadosTabelaEnviados(dados) {
     try {

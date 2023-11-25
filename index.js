@@ -18,11 +18,8 @@ app.get('/api/dados',async (req, res) => {
     try {
         const dadosDb = await buscaDados();
 
-        const grupoDe400 = [];
-        for(let i = 0; i < dadosDb.length; i+=400) {
-            grupoDe400.push(dadosDb.slice(i, i + 400));
-        }
-        res.json(grupoDe400);
+
+        res.json(dadosDb);
         
     } catch (erro) {
         res.status(500).send('Erro ao buscar dados');
@@ -48,7 +45,6 @@ app.get('/api/dados-enviados',async (req, res) => {
 
 
 app.post('/enviar-email', async (req, res) => {
-    const data = req.body.data;
     const dadosRecebidos = req.body.dados;
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -63,10 +59,19 @@ app.post('/enviar-email', async (req, res) => {
             rejectUnauthorized: false,
         }
     })
-    filaDeEmails.push(dadosRecebidos)
-    res.status(200).json('email Adicionado a fila')
     
-    enviaEmailDelay(transporter,dadosRecebidos,res)
+    
+ try{
+
+  
+    const envioDeEmails = await enviaEmail(transporter,dadosRecebidos)
+    res.json({sucess: true, messages: envioDeEmails})
+  }catch(erro){
+    res.status(500).json({sucess: false, messages:'erro ao enviar emails: ' + erro.message})
+  }finally{
+    transporter.close()
+  }
+
 })
 
 
@@ -93,7 +98,7 @@ app.post('/enviar-email', async (req, res) => {
 app.post('/excluir-dados-enviados', (req, res) => {
     const dadosExcluir = req.body.dadosExcluir;
     dadosExcluir.forEach(dados => {
-        excluiDados(dados.nome, dados.email)
+        excluiDados(dados.value)
     });
 
     // Chame a função para excluir os dados do banco de dados
@@ -104,7 +109,7 @@ app.post('/excluir-dados-enviados', (req, res) => {
 app.post('/salva-dados', (req, res) => {
     const dados = req.body.dados;
     dados.forEach(dados => {
-        enviaDados(dados.nome, dados.email)
+        enviaDados(dados)
     });
 
     // Chame a função para excluir os dados do banco de dados
