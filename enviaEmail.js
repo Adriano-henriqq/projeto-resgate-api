@@ -60,8 +60,6 @@ async function enviaEmail(transporter,dados, res) {
     
     
 //  }
-module.exports = {
-    enviaEmail,
-    // enviaEmailDelay,
-    // filaDeEmails
-}
+ 
+  export default enviaEmail
+   

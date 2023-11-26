@@ -1,7 +1,7 @@
-const mysql = require('mysql2');
+import mysql from 'mysql2'
 
 const conexao = mysql.createConnection({
-    host: 'localhost',
+    host:'localhost',
     user: 'root',
     database: 'banco-cs10'
 });
@@ -44,7 +44,7 @@ const conexao = mysql.createConnection({
     const query = `INSERT INTO dados_cs_csv (nome, email) VALUES ('${nome}', '${email}')`;
     conexao.query(query, (error, results, fields) => {
       if (error) throw error;
-      console.log(`Novo usuário inserido com ID: ${results.insertId}`);
+      console.log(`Novo usuário inserido com ID: ${results.insertId} ${nome}`);
     });
   }
   
@@ -82,7 +82,7 @@ const conexao = mysql.createConnection({
 
   
   
-  module.exports ={
+  export{
     buscaDados,
     enviaDados,
     excluiDados,
