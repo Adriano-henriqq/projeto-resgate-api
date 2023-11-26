@@ -49,7 +49,7 @@ app.post('/enviar-email', async (req, res) => {
     const dadosRecebidos = req.body.dados;
     const transporter = nodemailer.createTransport({
         host: process.env.HOST,
-        port: process.env.PORT,
+        port: process.env.PORTM,
         auth: {
             user: process.env.USER,
             pass: process.env.PASS,
